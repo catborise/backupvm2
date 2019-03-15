@@ -1,5 +1,26 @@
 # backupvm2
-kvm incremental backup
+Linux KVM incremental backup/replication.
+
+Create a pool(eg. backup, fkm) for all KVM hosts. Start pool.
+
+Prepare access for kvm hosts - create aliases
+```
+cat << EOF > .config/libvirt/libvirt.conf
+
+
+uri_aliases = [
+   "vm-kvm09=qemu+ssh://10.20.30.113/system",
+   "vm-kvm08=qemu+ssh://10.20.30.112/system",
+   "vm-kvm07=qemu+ssh://10.20.30.111/system",
+   "vm-kvm06=qemu+ssh://10.20.30.110/system",
+   "vm-kvm05=qemu+ssh://10.20.30.109/system",
+   "vm-kvm04=qemu+ssh://10.20.30.108/system",
+   "vm-kvm03=qemu+ssh://10.20.30.107/system",
+   "vm-kvm02=qemu+ssh://10.20.30.106/system",
+   "vm-kvm01=qemu+ssh://10.20.30.105/system",
+ ]
+EOF
+```
 
 create a bash script for single instance(backup_single.sh)
 ```
@@ -16,7 +37,7 @@ POOL="fkm"
 BACKUP_EXEC_PATH="/root/backupvmv2"
 BACKUP_EXEC="/root/backupvmv2/backupvmv2.py"
 BACKUP_VENV="/root/backupvmv2/venv/bin/activate"
-# SASL for libvirt
+# SASL/SSH for libvirt (depend on aliases)
 USERNAME=admin
 PASSWORD=pass
 
@@ -37,7 +58,7 @@ POOL="fkm"
 BACKUP_EXEC_PATH="/root/backupvmv2"
 BACKUP_EXEC="/root/backupvmv2/backupvmv2.py"
 BACKUP_VENV="/root/backupvmv2/venv/bin/activate"
-# SASL Username passwd
+# SASL/SSH Username passwd (depend on aliases)
 USERNAME=admin
 PASSWORD=passw
 
